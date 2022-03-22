@@ -11,7 +11,10 @@ token = os.getenv('token', None)
 # Init class
 G = Github(token)
 repo = G.get_repo(repository)
-releases = repo.get_releases()
+releases = list(repo.get_releases())
+
+# Sort releases by created date
+releases.sort(reverse=True, key=lambda x:x.created_at)
 
 # Output formatting function
 def output(release):
