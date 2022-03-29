@@ -7,11 +7,14 @@ import os
 wanted_release = os.getenv('type')
 repository = os.getenv('repository')
 token = os.getenv('token', None)
+sha = os.getenv('sha', None)
 
 # Init class
 G = Github(token)
 repo = G.get_repo(repository)
 releases = list(repo.get_releases())
+tags = list(repo.get_tags())
+tag_names = [tag.name for tag in tags]
 
 # Sort releases by created date
 releases.sort(reverse=True, key=lambda x:x.created_at)
@@ -24,9 +27,15 @@ def output(release):
     dl_url = assets[0].browser_download_url if assets.totalCount > 0 else '""'
     print('::set-output name=browser_download_url::{}'.format(dl_url))
 
+# Handle SHA
+if sha:
+    tag_names = [tag.name for tag in tags if tag.commit.sha == sha]
 
 # Releases parsing
 for release in releases:
+    # Only look at releases that have the tag name
+    if release.tag_name not in tag_names:
+        continue
     if wanted_release == 'stable':
         if release.prerelease == 0 and release.draft == 0:
             output(release)

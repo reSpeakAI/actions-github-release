@@ -1,30 +1,33 @@
-name: 'Get latest Github release'
-description: 'Get the latest release from another repository and output that for use in other actions'
+name: "Get latest Github release"
+description: "Get the latest release from another repository and output that for use in other actions"
 author: "rez0n"
 
 branding:
-  icon: 'anchor'
-  color: 'orange'
+  icon: "anchor"
+  color: "orange"
 
 inputs:
   token:
-    description: 'GitHub Access token'
+    description: "GitHub Access token"
     required: false
   repository:
-    description: 'The repository name in full formar (owner/repo)'
+    description: "The repository name in full formar (owner/repo)"
     required: true
   type:
-    description: 'Wanted release type (latest, stable, draft, nodraft)'
+    description: "Wanted release type (latest, stable, draft, nodraft)"
     required: true
+  sha:
+    description: "The sha of the commit"
+    required: false
 
 outputs:
   release:
-    description: 'Release tag'
+    description: "Release tag"
   release_id:
-    description: 'Release Github ID'
+    description: "Release Github ID"
   browser_download_url:
-    description: 'Release first asset download URL'
+    description: "Release first asset download URL"
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
