@@ -21,11 +21,16 @@ releases.sort(reverse=True, key=lambda x:x.created_at)
 
 # Output formatting function
 def output(release):
-    print('::set-output name=release::{}'.format(release.tag_name))
-    print('::set-output name=release_id::{}'.format(release.id))
     assets = release.get_assets()
     dl_url = assets[0].browser_download_url if assets.totalCount > 0 else '""'
-    print('::set-output name=browser_download_url::{}'.format(dl_url))
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+        out.writelines(
+            [
+                f'release={release.tag_name}\n',
+                f'release_id={release.id}\n',
+                f'browser_download_url={dl_url}\n',
+            ]
+        )
 
 # Handle SHA
 if sha:
